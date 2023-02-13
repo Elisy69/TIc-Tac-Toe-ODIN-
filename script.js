@@ -1,4 +1,8 @@
+// Write a function to update players objects
+//clear up gameBoard array
+
 const UI = {
+  PLAY: document.getElementById("playBtn"),
   BOARD: {
     sector_0: document.getElementById("0"),
     sector_1: document.getElementById("1"),
@@ -10,21 +14,105 @@ const UI = {
     sector_7: document.getElementById("7"),
     sector_8: document.getElementById("8"),
   },
+  TURN_DISPLAY: document.querySelector(".turn"),
+  ROUND_NUMBER: document.querySelector(".roundNumber"),
+  SECTORS: document.querySelectorAll(".sector"),
 };
 
-const gameBoard = { sector: ["X", "O", "X", "O", "O", "", "", "X", ""] };
-
-const current = { round: 0 };
+const gameBoard = { sector: ["", "", "", "", "", "", "", "", ""] };
 
 const Player = (name) => {
-  const makeTurn = () => {};
+  const makeTurn = () => {
+    UI.TURN_DISPLAY.textContent = `${name} is playing`;
+    console.log("waiting for sector selection...");
+  };
   return { name, makeTurn };
 };
 
+let playerOne = Player(form.playerOneName.value);
+let playerTwo = Player(form.playerTwoName.value);
+
 const game = (() => {
   let count = 0;
-  console.log(`initial value: ${count}`);
-
+  const countRound = () => {
+    count++;
+    console.log(`Round number upd... current round is ${count}`);
+    if (count <= 9) {
+      UI.ROUND_NUMBER.textContent = count;
+    } else {
+    }
+  };
+  const currentRound = () => count;
+  const isItPlayerOneTurn = () => {
+    let round = currentRound();
+    if (Number(round) % 2 === 0) {
+      return false;
+    } else return true;
+  };
+  const playRound = () => {
+    countRound();
+    console.log("checking who is playing...");
+    if (isItPlayerOneTurn() === true) {
+      console.log("First player turn");
+      playerOne.makeTurn();
+    } else {
+      console.log("Second player turn");
+      playerTwo.makeTurn();
+    }
+  };
+  const addMark = (index, mark) => {
+    console.log(`Sector ${index} is selected! The mark is ${mark}`);
+    gameBoard.sector[index] = mark;
+    updateBoard();
+    checkResult(mark);
+  };
+  const checkResult = (mark) => {
+    if (
+      (gameBoard.sector[0] === mark &&
+        gameBoard.sector[1] === mark &&
+        gameBoard.sector[2] === mark) ||
+      (gameBoard.sector[3] === mark &&
+        gameBoard.sector[4] === mark &&
+        gameBoard.sector[5] === mark) ||
+      (gameBoard.sector[6] === mark &&
+        gameBoard.sector[7] === mark &&
+        gameBoard.sector[8] === mark) ||
+      (gameBoard.sector[0] === mark &&
+        gameBoard.sector[3] === mark &&
+        gameBoard.sector[6] === mark) ||
+      (gameBoard.sector[1] === mark &&
+        gameBoard.sector[4] === mark &&
+        gameBoard.sector[7] === mark) ||
+      (gameBoard.sector[2] === mark &&
+        gameBoard.sector[5] === mark &&
+        gameBoard.sector[8] === mark) ||
+      (gameBoard.sector[0] === mark &&
+        gameBoard.sector[4] === mark &&
+        gameBoard.sector[8] === mark) ||
+      (gameBoard.sector[2] === mark &&
+        gameBoard.sector[4] === mark &&
+        gameBoard.sector[6] === mark)
+    ) {
+      restartGame(mark);
+    } else playRound();
+  };
+  const restartGame = (mark) => {
+    if (mark === "X") {
+      alert(`${playerOne.name} is a winner!`);
+      console.log("We have a wiinner!");
+    } else alert(`${playerTwo.name} is a winner!`);
+    gameBoard.sector.forEach((e) => {
+      e = "";
+    });
+    for (let sector in UI.BOARD) {
+      UI.BOARD[sector].textContent = "";
+    }
+    count = 0;
+    UI.TURN_DISPLAY.textContent = "";
+    UI.ROUND_NUMBER.textContent = "";
+    form.playerOneName.value = "";
+    form.playerTwoName.value = "";
+  };
   const updateBoard = () =>
     gameBoard.sector.forEach((e, index) => {
       String(index);
@@ -34,26 +122,44 @@ const game = (() => {
         }
       }
     });
-  const playRound = () => {};
-  const checkResult = () => {};
-
-  const countRound = () => {
-    count++;
+  const start = () => {
+    UI.PLAY.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (form.playerOneName.value === "" || form.playerTwoName.value === "") {
+        console.log("Enter Players Names!");
+      } else if (Number(UI.ROUND_NUMBER.textContent) > 0) {
+      } else {
+        playRound();
+      }
+    });
   };
-  const checkWhosurn = () => {};
-  const getCount = () => count;
+  const eventHandler = () => {
+    UI.SECTORS.forEach((sector) => {
+      sector.addEventListener("click", (sector) => {
+        let index = sector.target.id;
+        if (
+          gameBoard.sector[index] === "X" ||
+          gameBoard.sector[index] === "O" ||
+          UI.ROUND_NUMBER.textContent === ""
+        ) {
+        } else {
+          let mark = "";
+          if (isItPlayerOneTurn() === true) {
+            mark = "X";
+            addMark(index, mark);
+          } else {
+            mark = "O";
+            addMark(index, mark);
+          }
+        }
+      });
+    });
+  };
   return {
-    updateBoard,
-    countRound,
-    getCount,
+    eventHandler,
+    start,
   };
 })();
 
-game.countRound();
-game.countRound();
-game.countRound();
-game.countRound();
-game.countRound();
-
-const res = game.getCount();
-console.log(res);
+game.start();
+game.eventHandler();

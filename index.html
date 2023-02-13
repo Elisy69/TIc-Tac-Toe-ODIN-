@@ -10,9 +10,36 @@
     <title>Tic Tac Toe</title>
   </head>
   <body>
-    <header>TIC TAC TOE</header>
+    <header>
+      <h2>TIC TAC TOE</h2>
+      <button type="submit" form="form" id="playBtn">Play</button>
+      <div class="turn"></div>
+    </header>
     <div class="interface">
-      <div class="score">Score:</div>
+      <form action="" method="get" id="form" class="players">
+        <div class="playerOne">
+          Player One:
+          <input
+            class="palyerOneName"
+            name="playerOneName"
+            type="text"
+            placeholder="Enter name"
+            value="playerOne"
+            required
+          />
+        </div>
+        <div class="playerTwo">
+          Player Two:
+          <input
+            class="palyerOneName"
+            name="playerTwoName"
+            type="text"
+            placeholder="Enter name"
+            value="playerTwo"
+            required
+          />
+        </div>
+      </form>
       <dib class="board">
         <div id="0" class="sector"></div>
         <div id="1" class="sector"></div>
@@ -24,7 +51,9 @@
         <div id="7" class="sector"></div>
         <div id="8" class="sector"></div>
       </dib>
-      <div class="round">Round:</div>
+      <div class="round">
+        <span class="rountTitle">Round:</span><span class="roundNumber"></span>
+      </div>
     </div>
   </body>
 </html>
