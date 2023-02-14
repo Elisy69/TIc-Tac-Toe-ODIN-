@@ -22,7 +22,6 @@ const gameBoard = { sector: ["", "", "", "", "", "", "", "", ""] };
 
 const Player = (name) => {
   const makeTurn = () => {
-    UI.TURN_DISPLAY.textContent = `${name} is playing`;
     console.log("waiting for sector selection...");
   };
   return { name, makeTurn };
@@ -55,9 +54,11 @@ const game = (() => {
     console.log("checking who is playing...");
     if (isItPlayerOneTurn() === true) {
       console.log("First player turn");
+      UI.TURN_DISPLAY.textContent = `${playerOne.name} is playing`;
       playerOne.makeTurn();
     } else {
       console.log("Second player turn");
+      UI.TURN_DISPLAY.textContent = `${playerTwo.name} is playing`;
       playerTwo.makeTurn();
     }
   };
