@@ -1,5 +1,4 @@
 // Write a function to update players objects
-//clear up gameBoard array
 
 const UI = {
   PLAY: document.getElementById("playBtn"),
@@ -29,11 +28,12 @@ const Player = (name) => {
   return { name, makeTurn };
 };
 
-let playerOne = Player(form.playerOneName.value);
-let playerTwo = Player(form.playerTwoName.value);
+let playerOne = Player();
+let playerTwo = Player();
 
 const game = (() => {
   let count = 0;
+
   const countRound = () => {
     count++;
     console.log(`Round number upd... current round is ${count}`);
@@ -51,6 +51,7 @@ const game = (() => {
   };
   const playRound = () => {
     countRound();
+    console.log(playerOne.name);
     console.log("checking who is playing...");
     if (isItPlayerOneTurn() === true) {
       console.log("First player turn");
@@ -99,17 +100,20 @@ const game = (() => {
   const restartGame = (mark) => {
     if (mark === "X") {
       alert(`${playerOne.name} is a winner!`);
-      console.log("We have a wiinner!");
     } else alert(`${playerTwo.name} is a winner!`);
-    gameBoard.sector.forEach((e) => {
-      e = "";
+
+    gameBoard.sector.forEach((e, index) => {
+      gameBoard.sector[index] = "";
     });
+
     for (let sector in UI.BOARD) {
       UI.BOARD[sector].textContent = "";
     }
     count = 0;
     UI.TURN_DISPLAY.textContent = "";
     UI.ROUND_NUMBER.textContent = "";
+    playerOne.name = "";
+    playerTwo.name = "";
     form.playerOneName.value = "";
     form.playerTwoName.value = "";
   };
@@ -129,6 +133,8 @@ const game = (() => {
         console.log("Enter Players Names!");
       } else if (Number(UI.ROUND_NUMBER.textContent) > 0) {
       } else {
+        playerOne.name = form.playerOneName.value;
+        playerTwo.name = form.playerTwoName.value;
         playRound();
       }
     });
